@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Stop Motion Studio</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <h1>🎬 Stop Motion Studio</h1>
+  <div class="header-actions">
+    <button id="btnNew" title="Start a new movie">New</button>
+    <button id="btnImport" title="Add photos from your computer">Add photos</button>
+    <button id="btnExport" class="primary" title="Save your movie as a video">Export video</button>
+    <input type="file" id="fileInput" accept="image/*" multiple hidden>
+  </div>
+</header>
+
+<main>
+  <section class="stage-wrap">
+    <div class="stage" id="stage">
+      <video id="video" autoplay playsinline muted></video>
+      <img id="onion" alt="">
+      <img id="review" alt="">
+      <div id="grid" hidden></div>
+      <div id="flash"></div>
+      <div id="msg" hidden></div>
+    </div>
+    <div class="status" id="status">Starting camera…</div>
+  </section>
+
+  <aside class="controls">
+    <button id="btnCapture" class="capture" title="Take a picture (Space)">📷 Capture<small>Space</small></button>
+
+    <div class="row">
+      <button id="btnPlay" title="Play (P)">▶ Play</button>
+      <button id="btnLive" title="Back to camera (L)">● Live</button>
+    </div>
+
+    <div class="row">
+      <button id="btnPrev" title="Previous frame (←)">◀ Prev</button>
+      <button id="btnNext" title="Next frame (→)">Next ▶</button>
+    </div>
+
+    <div class="row">
+      <button id="btnDup" title="Duplicate selected frame (hold longer)">⧉ Duplicate</button>
+      <button id="btnDel" class="danger" title="Delete selected frame (Delete)">🗑 Delete</button>
+    </div>
+
+    <div class="row">
+      <button id="btnLeft" title="Move frame earlier">⇤ Move left</button>
+      <button id="btnRight" title="Move frame later">Move right ⇥</button>
+    </div>
+
+    <label>Speed: <b id="fpsVal">8</b> frames/sec
+      <input type="range" id="fps" min="1" max="24" value="8">
+    </label>
+    <label>Onion skin: <b id="onionVal">40</b>%
+      <input type="range" id="onionSlider" min="0" max="80" value="40">
+    </label>
+    <label class="check"><input type="checkbox" id="chkGrid"> Show grid</label>
+    <label class="check"><input type="checkbox" id="chkLoop" checked> Loop playback</label>
+
+    <label>Camera
+      <select id="cameraSelect"></select>
+    </label>
+  </aside>
+</main>
+
+<footer>
+  <div class="timeline" id="timeline" aria-label="Frames"></div>
+</footer>
+
+<div id="overlay" hidden><div id="overlayBox"><p id="overlayText"></p><progress id="overlayBar" max="1" value="0"></progress></div></div>
+
+<script src="app.js"></script>
+</body>
+</html>
