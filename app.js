@@ -209,7 +209,10 @@ async function exportVideo() {
   if (!state.frames.length) { alert('Capture some frames first!'); return; }
   if (typeof MediaRecorder === 'undefined') { alert('Video export is not supported in this browser.'); return; }
   stopPlay();
-  const mime = ['video/webm;codecs=vp9', 'video/webm;codecs=vp8', 'video/webm'].find(m => MediaRecorder.isTypeSupported(m));
+  // Prefer MP4 (H.264) so the movie opens in common video editors; fall back to WebM on older browsers.
+  const mime = ['video/mp4;codecs=avc1.42E01F', 'video/mp4;codecs=avc1', 'video/mp4',
+    'video/webm;codecs=vp9', 'video/webm;codecs=vp8', 'video/webm'].find(m => MediaRecorder.isTypeSupported(m));
+  const ext = mime.startsWith('video/mp4') ? 'mp4' : 'webm';
   const fps = +els.fps.value, dt = 1000 / fps;
   const c = document.createElement('canvas'); c.width = W; c.height = H;
   const ctx = c.getContext('2d');
@@ -229,11 +232,11 @@ async function exportVideo() {
   await wait(dt);
   rec.stop(); await done;
   hideOverlay();
-  const url = URL.createObjectURL(new Blob(chunks, { type: 'video/webm' }));
+  const url = URL.createObjectURL(new Blob(chunks, { type: mime.split(';')[0] }));
   const a = document.createElement('a');
-  a.href = url; a.download = 'my-stop-motion.webm'; document.body.appendChild(a); a.click(); a.remove();
+  a.href = url; a.download = 'my-stop-motion.' + ext; document.body.appendChild(a); a.click(); a.remove();
   setTimeout(() => URL.revokeObjectURL(url), 10000);
-  setStatus('Movie saved to your Downloads folder (my-stop-motion.webm).');
+  setStatus(`Movie saved to your Downloads folder (my-stop-motion.${ext}).`);
 }
 function showOverlay(t, p) { els.overlay.hidden = false; els.overlayText.textContent = t; els.overlayBar.value = p; }
 function hideOverlay() { els.overlay.hidden = true; }
